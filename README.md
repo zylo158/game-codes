@@ -220,6 +220,21 @@ The server runs these jobs automatically:
 
 ---
 
+## Rate Limits
+
+| Endpoints | Limit | Window |
+|---|---|---|
+| `GET /health`, `GET /games`, `GET /codes` | 30 requests | per 60 seconds per IP |
+| `POST` / `DELETE` (auth required) | unlimited | — |
+
+Exceeding the limit returns `429`:
+
+```json
+{"error": "Rate limit exceeded", "retry_after": 60}
+```
+
+---
+
 ## Notes
 
 - Hosted on Render free tier — may spin down after inactivity. First request may take 3-5s to wake up.

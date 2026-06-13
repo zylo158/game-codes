@@ -12,6 +12,7 @@ from api.constants import CodeStatus, Game, GAME_DESCRIPTIONS, GAME_NAMES
 from api.codes.task import check_codes, update_codes
 from api.db import db
 from api.models import CreateCode
+from api.ratelimit import RateLimitMiddleware
 
 security = HTTPBearer(auto_error=False)
 scheduler = AsyncIOScheduler()
@@ -39,6 +40,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Game Codes API", lifespan=lifespan)
+app.add_middleware(RateLimitMiddleware, max_requests=30, window=60)
 
 
 @app.get("/")

@@ -9,9 +9,11 @@ class Game:
     bluearchive: Final[str] = "bluearchive"
     endfield: Final[str] = "endfield"
 
+    _ALL: list[str] = ["wuwa", "nte", "bluearchive", "endfield"]
+
     @classmethod
     def values(cls) -> list[str]:
-        return [v for k, v in vars(cls).items() if isinstance(v, str) and not k.startswith("_")]
+        return list(cls._ALL)
 
 
 GAME_NAMES: Final[dict[str, str]] = {

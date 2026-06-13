@@ -8,6 +8,8 @@ import shutil
 from pathlib import Path
 from typing import Any
 
+from loguru import logger
+
 SEED_FILE = Path("data.json")
 DATA_FILE = Path(os.getenv("DATA_FILE", "data.json"))
 BACKUP_FILE = DATA_FILE.with_name(DATA_FILE.name + ".bak")
@@ -68,7 +70,7 @@ class RedeemCodeStore:
                 for r in rows
             ]
             self._write_json(records)
-            print(f"Migrated {len(records)} records from {DB_FILE.name} to {DATA_FILE.name}")
+            logger.info(f"Migrated {len(records)} records from {DB_FILE.name} to {DATA_FILE.name}")
         except Exception:
             pass
 
@@ -80,9 +82,9 @@ class RedeemCodeStore:
                 json.loads(SEED_FILE.read_text("utf-8"))
                 DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(SEED_FILE, DATA_FILE)
-                print(f"Seeded {DATA_FILE} from {SEED_FILE}")
+                logger.info(f"Seeded {DATA_FILE} from {SEED_FILE}")
             except Exception as e:
-                print(f"Seed failed: {e}")
+                logger.warning(f"Seed failed: {e}")
 
     def _restore_from_backup(self) -> None:
         if DATA_FILE.exists():
@@ -91,7 +93,7 @@ class RedeemCodeStore:
             try:
                 json.loads(BACKUP_FILE.read_text("utf-8"))
                 shutil.copy2(BACKUP_FILE, DATA_FILE)
-                print(f"Restored data from backup {BACKUP_FILE.name}")
+                logger.info(f"Restored data from backup {BACKUP_FILE.name}")
             except Exception:
                 pass
 

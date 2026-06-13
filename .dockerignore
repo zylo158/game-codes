@@ -1,9 +1,0 @@
-__pycache__
-*.pyc
-.env
-cookies.json
-uids.json
-logs/
-data.json
-game-codes.db
-.git

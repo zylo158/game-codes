@@ -12,7 +12,10 @@ class CreateCode(BaseModel):
     @field_validator("code")
     @classmethod
     def __upper_code(cls, v: str) -> str:
-        return v.upper()
+        v = v.upper()
+        if len(v) > 50:
+            raise ValueError("Code too long (max 50 characters)")
+        return v
 
     @field_validator("game")
     @classmethod
