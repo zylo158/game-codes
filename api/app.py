@@ -8,7 +8,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from loguru import logger
 
 from api.config import settings
-from api.constants import CodeStatus, Game
+from api.constants import CodeStatus, Game, GAME_DESCRIPTIONS, GAME_NAMES
 from api.codes.task import check_codes, update_codes
 from api.db import db
 from api.models import CreateCode
@@ -49,7 +49,10 @@ async def health():
 
 @app.get("/games")
 async def list_games():
-    return Game.values()
+    return {
+        slug: {"name": GAME_NAMES.get(slug, ""), "description": GAME_DESCRIPTIONS.get(slug, "")}
+        for slug in Game.values()
+    }
 
 
 @app.get("/codes")

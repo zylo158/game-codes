@@ -61,7 +61,24 @@ curl https://game-codes.onrender.com/games
 ```
 
 ```json
-["wuwa", "nte", "bluearchive", "endfield"]
+{
+  "wuwa": {
+    "name": "Wuthering Waves",
+    "description": "Open-world action RPG by Kuro Games"
+  },
+  "nte": {
+    "name": "Neverness to Everness",
+    "description": "Urban fantasy open-world RPG"
+  },
+  "bluearchive": {
+    "name": "Blue Archive",
+    "description": "Tactical RPG with anime-style students"
+  },
+  "endfield": {
+    "name": "Arknights: Endfield",
+    "description": "3D sci-fi RPG, sequel to Arknights"
+  }
+}
 ```
 
 ---
