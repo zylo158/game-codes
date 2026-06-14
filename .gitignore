@@ -9,3 +9,5 @@ game-codes.db
 build/
 *.egg-info/
 .vscode/
+
+.vercel

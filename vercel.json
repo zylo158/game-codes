@@ -1,8 +1,1 @@
-{
-  "functions": {
-    "api/app.py": {
-      "maxDuration": 60,
-      "excludeFiles": "{assets/**,tests/**,__pycache__/**}"
-    }
-  }
-}
+{}
