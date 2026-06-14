@@ -199,6 +199,18 @@ def parse_pockettactics(html: str) -> list[dict]:
     return _parse_generic(html)
 
 
+def parse_gamespot(html: str) -> list[dict]:
+    return _parse_generic(html)
+
+
+def parse_pcgamer(html: str) -> list[dict]:
+    return _parse_generic(html)
+
+
+def parse_pocketgamer(html: str) -> list[dict]:
+    return _parse_generic(html)
+
+
 _PARSERS: dict[CodeSource, ParserFunc] = {
     CodeSource.GAMESRADAR: parse_gamesradar,
     CodeSource.GAMERANT: parse_gamerant,
@@ -210,6 +222,9 @@ _PARSERS: dict[CodeSource, ParserFunc] = {
     CodeSource.WUTHERINGGG: parse_wutheringgg,
     CodeSource.EUROGAMER: parse_eurogamer,
     CodeSource.POCKETTACTICS: parse_pockettactics,
+    CodeSource.GAMESPOT: parse_gamespot,
+    CodeSource.PCGAMER: parse_pcgamer,
+    CodeSource.POCKETGAMER: parse_pocketgamer,
 }
 
 
