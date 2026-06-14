@@ -36,9 +36,18 @@ async def lifespan(app: FastAPI):
             check_codes, "cron", hour=1, minute=30, timezone="Asia/Taipei", id="check"
         )
         scheduler.start()
+        import asyncio
+        asyncio.create_task(_initial_update())
     logger.info("Started scheduler")
     yield
     scheduler.shutdown()
+
+
+async def _initial_update():
+    await asyncio.sleep(5)
+    logger.info("Running initial code update on startup...")
+    await update_codes()
+    logger.info("Initial code update complete")
 
 
 app = FastAPI(title="Game Codes API", lifespan=lifespan)
