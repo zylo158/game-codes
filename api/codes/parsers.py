@@ -66,7 +66,7 @@ NOISE_WORDS: set[str] = {
     "POWER", "SCAMMERS", "BEWARE", "DOIR", "SOL3",
     "MANY", "HAPPY", "CONVENES", "TIDES", "LUSTROUS",
     "EVERFLOWING", "RESONATORS", "WITHYOU", "STAGE", "LATE",
-    "IINEW",
+    "IINEW", "INSP", "NTEHAVEFUN", "UTDX",
 }
 
 NOISE_PREFIXES: tuple[str, ...] = (
@@ -110,7 +110,11 @@ def _find_code_patterns(text: str) -> list[str]:
 def _parse_tables(soup: BeautifulSoup) -> list[dict]:
     results: list[dict] = []
     for table in soup.find_all("table"):
+        table_heading = table.find_previous(["h1", "h2", "h3", "h4"])
+        if table_heading and "expir" in table_heading.get_text(strip=True).lower():
+            continue
         rows = table.find_all("tr")
+        seen_in_table: set[str] = set()
         for row in rows:
             cells = row.find_all(["td", "th"])
             if any("expir" in c.get_text(" ", strip=True).lower() for c in cells):
@@ -125,7 +129,9 @@ def _parse_tables(soup: BeautifulSoup) -> list[dict]:
                 elif i > 0 and not rewards_text and len(text) > 3:
                     rewards_text = text
             for code in codes_in_row:
-                results.append({"code": code, "rewards": rewards_text})
+                if code not in seen_in_table:
+                    seen_in_table.add(code)
+                    results.append({"code": code, "rewards": rewards_text})
     return results
 
 
@@ -134,10 +140,10 @@ def _parse_structured_elements(soup: BeautifulSoup) -> list[str]:
     for tag in soup.find_all(["code", "strong", "b", "li"]):
         text = tag.get_text(strip=True)
         if len(text) < 100:
+            heading = tag.find_previous(["h1", "h2", "h3", "h4"])
+            if heading and "expir" in heading.get_text(strip=True).lower():
+                continue
             if tag.name == "li":
-                heading = tag.find_previous(["h1", "h2", "h3", "h4"])
-                if heading and "expir" in heading.get_text(strip=True).lower():
-                    continue
                 found = [c for c in _find_code_patterns(text) if text != c]
             else:
                 found = _find_code_patterns(text)
