@@ -56,6 +56,18 @@ header {
   color: #bbb;
 }
 
+@media (max-width: 500px) {
+  .stat-badge { font-size: 11px; padding: 3px 10px; }
+  .header-top h1 { font-size: 22px; }
+  header { padding: 16px 16px 0; }
+  main { padding: 0 16px; }
+  .code-text { font-size: 15px; }
+  .dropdown-trigger { padding: 12px 40px 12px 12px; font-size: 14px; }
+  .dropdown-option { padding: 12px; font-size: 13px; }
+  .logo-img { width: 24px; height: 24px; }
+  .code-card { padding: 12px; }
+}
+
 main {
   flex: 1;
   max-width: 960px;

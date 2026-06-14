@@ -11,11 +11,15 @@ async function fetchJSON(url) {
   return res.json();
 }
 
+const GAME_SHORT_LABELS = { wuwa: "WuWa", nte: "NTE", bluearchive: "BA", endfield: "Endfield" };
+
 function updateStats(stats) {
   const row = document.getElementById("statsRow");
+  const isMobile = window.innerWidth < 500;
   row.innerHTML = GAMES.map(slug => {
     const g = stats[slug] || { codes: 0, unverified: 0 };
-    return `<span class="stat-badge" style="color:${GAME_COLORS[slug]}">${GAME_LABELS[slug]}: ${g.codes} active</span>`;
+    const label = isMobile ? GAME_SHORT_LABELS[slug] : GAME_LABELS[slug];
+    return `<span class="stat-badge" style="color:${GAME_COLORS[slug]}">${label}: ${g.codes}</span>`;
   }).join("");
 }
 
