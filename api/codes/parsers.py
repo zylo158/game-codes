@@ -63,6 +63,7 @@ NOISE_WORDS: set[str] = {
     "CHINESE", "RUSSIAN", "ARABIC", "HINDI",
     "PSM3", "PTCGP", "BDSP", "ST79", "C2000", "B100", "M1000",
     "INFERNO", "MANISH", "FIND",
+    "POWER", "SCAMMERS", "BEWARE", "DOIR", "SOL3",
 }
 
 NOISE_PREFIXES: tuple[str, ...] = (
