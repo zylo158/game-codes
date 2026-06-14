@@ -101,6 +101,7 @@ Returns verified and unverified codes for a game.
 **Response fields:**
 - `codes` — confirmed working, safe to redeem
 - `unverified` — reported on news sites, not yet confirmed
+- `rewards` — reward description (auto-extracted from table sources; may be empty for non-table sources)
 
 ```bash
 curl https://game-codes.onrender.com/codes?game=nte
@@ -228,6 +229,17 @@ The server runs these jobs automatically:
 
 ---
 
+## Error Responses
+
+| Status | Code | When |
+|---|---|---|
+| `404` | `Unknown game` | Invalid `game` slug |
+| `401` | `Invalid token` | Missing or wrong Bearer token |
+| `409` | `Code already exists` | Duplicate on `POST /codes` |
+| `429` | `Rate limit exceeded` | Too many requests (see below) |
+
+---
+
 ## Rate Limits
 
 | Endpoints | Limit | Window |
@@ -243,8 +255,40 @@ Exceeding the limit returns `429`:
 
 ---
 
+## Source Sites
+
+| Game | Sources |
+|---|---|
+| WuWa | GamesRadar, GameRant, VG247, PCGamesN, wuthering.gg |
+| NTE | GamesRadar, Game8, GameWith |
+| Blue Archive | GameRant, Dexerto, Eurogamer, Pocket Tactics |
+| Endfield | GamesRadar, Game8 |
+
+---
+
+## Self-Host
+
+```bash
+git clone https://github.com/zylo158/game-codes
+cd game-codes
+
+python -m venv .venv
+.venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+
+# Create .env with:
+#   API_TOKEN=your_token
+#   PORT=1078
+
+python run.py
+```
+
+Requires Python 3.11+. No database — everything stored in `data.json`.
+
+---
+
 ## Notes
 
 - Hosted on Render free tier — may spin down after inactivity. First request may take 3-5s to wake up.
 - Codes are stored as a JSON file in the repo. Data resets on deploy but the hourly scheduler re-populates it.
-- Source sites: GamesRadar, GameRant, VG247, PCGamesN, Eurogamer, Pocket Tactics, Dexerto, Game8, GameWith, wuthering.gg.
+- The scraper filters noise (nav text, common words, product IDs) and detects duplicate patterns automatically.
