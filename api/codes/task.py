@@ -21,11 +21,17 @@ async def update_codes() -> None:
                 where={"code": entry["code"], "game": game}
             )
             if existing:
-                if existing.status == CodeStatus.UNVERIFIED and not integration.has_web_redemption:
-                    await db.redeemcode.update(
-                        where={"id": existing.id},
-                        data={"status": CodeStatus.OK},
-                    )
+                if existing.status in (CodeStatus.NOT_OK, CodeStatus.UNVERIFIED):
+                    new_status = await integration.check_code(entry["code"])
+                    if new_status != existing.status:
+                        await db.redeemcode.update(
+                            where={"id": existing.id},
+                            data={"status": new_status},
+                        )
+                        logger.info(
+                            f"Reactivated {entry['code']} for {game}: "
+                            f"{existing.status} -> {new_status}"
+                        )
                 if entry.get("rewards") and not existing.rewards:
                     await db.redeemcode.update(
                         where={"id": existing.id},
