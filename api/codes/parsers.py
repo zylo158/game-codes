@@ -71,11 +71,19 @@ def parse_gamesradar(html: str) -> list[dict]:
     container = _container(soup, SELECTORS[CodeSource.GAMESRADAR])
     results: list[dict] = []
     seen: set[str] = set()
+    passed_livestream = False
     for li in container.find_all("li"):
-        if _heading_has_expired(li):
+        if _heading_has_expired(li) or passed_livestream:
             continue
         code, rewards = _find_li_content(li)
         if code and _is_valid_code(code) and code not in seen:
+            li_text = li.get_text(" ", strip=True)
+            idx = li_text.upper().find(code)
+            if idx >= 0:
+                after = li_text[idx + len(code):]
+                if "livestream" in after.lower() or "live stream" in after.lower():
+                    passed_livestream = True
+                    continue
             seen.add(code)
             results.append({"code": code, "rewards": rewards})
     return results
